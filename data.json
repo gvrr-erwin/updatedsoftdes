@@ -1,0 +1,40 @@
+{
+  "transactions": [
+    {
+      "type": "income",
+      "name": "Part-time Job",
+      "amount": 45445,
+      "date": "2023-11-20"
+    },
+    {
+      "type": "expense",
+      "name": "hehe",
+      "amount": -993,
+      "date": "2023-11-22"
+    },
+    {
+      "type": "income",
+      "name": "Part-time Job",
+      "amount": 1233,
+      "date": "2023-11-20"
+    },
+    {
+      "type": "income",
+      "name": "Erwin Angeles Guevarra",
+      "amount": 8787,
+      "date": "2023-11-20"
+    },
+    {
+      "type": "income",
+      "name": "Erwin Luna",
+      "amount": 7878,
+      "date": "2023-11-30"
+    },
+    {
+      "type": "expense",
+      "name": "flash",
+      "amount": -23,
+      "date": "2023-11-23"
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Expense Tracker</h1>
+      <header>
+        
+        <div>
+          <h5>Total Balance</h5>
+          <span id="balance">₱0.00</span>
+        </div>
+        <div>
+          <h5>Income</h5>
+          <span id="income">₱0.00</span>
+        </div>
+        <div>
+          <h5>Expense</h5>
+          <span id="expense">₱0.00</span>
+        </div>
+      </header>
+
+      <section>
+        <h3>Transactions</h3>
+        <ul id="transactionList"></ul>
+        <div id="status"></div>
+      </section>
+
+      <section>
+        <h3>Add Transaction</h3>
+
+        <form id="transactionForm" action="/submit" method="post">
+          <div>
+            <label for="type">
+              <input type="checkbox" name="type" id="type" />
+              <div class="option">
+                <span>Expense</span>
+                <span>Income</span>
+              </div>
+            </label>
+          </div>
+          <div>
+            <label for="name">Name</label>
+            <input type="text" name="name" required />
+          </div>
+          <div>
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              name="amount"
+              value="0"
+              id="amount"
+              required
+            />
+          </div>
+          <div>
+            <label for="date">Date</label>
+            <input type="date" name="date" id="date" required />
+          </div>
+          <button type="submit" id="submit">Submit</button>
+        </form>
+      </section>
+    </main>
+      <div class="chartCard">
+        <div class="chartBox">
+          <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
+      </div>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+      <script>
+        // setup 
+        const dates = [new Date('2023-11-20 00:00:00 GMT+0800'),'2023-11-21','2023-11-22','2023-11-23','2023-11-24'];
+        const datapoints = [10,15,20,25,30];
+
+        const data = {
+          labels: dates,
+          datasets: [{
+            label: 'Transaction',
+            data: datapoints,
+            backgroundColor: 'rgba(255, 26, 104, 0.2)',
+            borderColor: 'rgba(255, 26, 104, 1)',
+            borderWidth: 1
+          }]
+        };
+    
+        // config 
+        const config = {
+          type: 'bar',
+          data,
+          options: {
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'day'
+                }
+              },
+
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        };
+    
+        // render init block
+        const myChart = new Chart(
+          document.getElementById('myChart'),
+          config
+        );
+    
+        // Instantly assign Chart.js version
+        const chartVersion = document.getElementById('chartVersion');
+        chartVersion.innerText = Chart.version;
+        </script>
+      
+      <!-- Include Axios script -->
+      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+      <!-- Add this script to your HTML file -->
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const transactionForm = document.getElementById('transactionForm');
+
+          transactionForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Get form values
+            const typeCheckbox = document.getElementById('type');
+            const transactionType = typeCheckbox.checked ? 'income' : 'expense';
+            const name = document.getElementsByName('name')[0].value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = document.getElementById('date').value;
+
+            // Validate amount
+            if (isNaN(amount)) {
+              alert('Please enter a valid amount.');
+              return;
+            }
+
+            // Create data object
+            const data = {
+              type: transactionType,
+              name: name,
+              amount: amount,
+              date: date,
+            };
+
+            // Use Axios to send a POST request to the server
+            axios.post('/submit', data)
+              .then((response) => {
+                console.log(response.data); // Log the server response if needed
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          });
+        });
+      </script>
+      <script src="tts.js"></script>
+  </body>
+</html>

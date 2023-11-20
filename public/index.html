@@ -72,7 +72,6 @@
           <canvas id="myChart" width="400" height="400"></canvas>
           Start: <input id="start" type="date" value="2023-11-01"> End: <input id="end" type="date" value="2023-11-05">
           <button onclick="filterDate()">Filter</button> <br>
-          <button onclick="resetDate()">Reset</button>
         </div>
       </div>
       <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
@@ -81,6 +80,8 @@
         // setup 00:00:00 GMT+0800
         const dates = ['2023-11-20','2023-11-21','2023-11-22','2023-11-23','2023-11-24'];
         const datapoints = [10,15,20,25,30];
+
+        const convertedDates = dates.map(date => new Date(date).setHours(0,0,0,0));
 
         const data = {
           labels: dates,
@@ -120,7 +121,23 @@
         );
 
         function filterDate(){
+          //new Date 00:00:00 GMT+0800
+          const start1 = new Date(document.getElementById('start').value);
+          const start = start1.setHours(0,0,0,0);
+          const end1 = new Date(document.getElementById('end').value);
+          const end = end1.setHours(0,0,0,0);
 
+          const filterDates = convertedDates.filter(date => date >= start && date <= end)
+          myChart.config.data.labels = filterDates;
+
+          const startArray = convertedDates.indexOf(filterDates[0]);
+          const endArray = convertedDates.indexOf(filterDates[filterDates.length-1]);
+          const copydatapoints = [...datapoints];
+          copydatapoints.splice(endArray + 1, filterDates.length);
+          copydatapoints.splice(0, startArray);
+
+          myChart.config.data.datasets[0].data = copydatapoints;
+          myChart.update();
         }
     
         // Instantly assign Chart.js version

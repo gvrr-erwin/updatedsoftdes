@@ -79,7 +79,7 @@
       <script>
         // setup 00:00:00 GMT+0800
         const dates = ['2023-11-20','2023-11-21','2023-11-22','2023-11-23','2023-11-24'];
-        const datapoints = [10,15,20,25,30];
+        const datapoints = [10,-15,20,25,30];
 
         const convertedDates = dates.map(date => new Date(date).setHours(0,0,0,0));
 
@@ -88,8 +88,12 @@
           datasets: [{
             label: 'Transaction',
             data: datapoints,
-            backgroundColor: 'rgba(255, 26, 104, 0.2)',
-            borderColor: 'rgba(255, 26, 104, 1)',
+            backgroundColor: function(context) {
+              const index = context.dataIndex;
+              const value = context.dataset.data[index];
+              return value < 0 ? 'red' :  // draw negative values in red
+                  'green';
+          },
             borderWidth: 1
           }]
         };
